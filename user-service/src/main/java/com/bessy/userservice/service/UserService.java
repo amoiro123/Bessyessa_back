@@ -53,24 +53,39 @@ public class UserService {
         return findUserByUsername(username);
     }
 
-    public User updateUserById(UserUpdateRequest request, MultipartFile file) {
-
-        //log.info("Consumed message: {}", request.toString());
-        log.debug("Attempting to update user with ID: {}", request.getId());
-        System.out.println("Attempting to update user 1");
+    public User updateUserDetailsById(UserUpdateRequest request) {
         User toUpdate = findUserById(request.getId());
 
         if (toUpdate == null) {
-            System.out.println("Attempting to update user 2");
-            log.error("User with ID: {} not found", request.getId());
             throw new NotFoundException("User not found");
         }
 
-        request.setUserDetails(updateUserDetails(toUpdate.getUserDetails(), request.getUserDetails(), file));
+        if (request.getUserDetails() != null) {
+            updateUserDetails(toUpdate.getUserDetails(), request.getUserDetails());
+        }
+
         modelMapper.map(request, toUpdate);
+        return userRepository.save(toUpdate);
+    }
+
+    public User updateUserProfilePicture(String id, MultipartFile file) {
+        User toUpdate = findUserById(id);
+
+        if (toUpdate == null) {
+            throw new NotFoundException("User not found");
+        }
+
+        if (file != null) {
+            String profilePicture = fileStorageClient.uploadImageToFIleSystem(file).getBody();
+            if (profilePicture != null) {
+                fileStorageClient.deleteImageFromFileSystem(toUpdate.getUserDetails().getProfilePicture());
+                toUpdate.getUserDetails().setProfilePicture(profilePicture);
+            }
+        }
 
         return userRepository.save(toUpdate);
     }
+
 
     public void deleteUserById(String id) {
         User toDelete = findUserById(id);
@@ -93,7 +108,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    private UserDetails updateUserDetails(UserDetails toUpdate, UserDetails request, MultipartFile file) {
+    /*private UserDetails updateUserDetails(UserDetails toUpdate, UserDetails request, MultipartFile file) {
         toUpdate = toUpdate == null ? new UserDetails() : toUpdate;
 
         if (file != null) {
@@ -107,5 +122,10 @@ public class UserService {
         modelMapper.map(request, toUpdate);
 
         return toUpdate;
+    }*/
+
+    private void updateUserDetails(UserDetails toUpdate, UserDetails request) {
+
+        modelMapper.map(request, toUpdate);
     }
 }

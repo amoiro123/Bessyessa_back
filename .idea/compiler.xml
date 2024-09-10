@@ -11,6 +11,7 @@
         <module name="config-server" />
         <module name="auth-service" />
         <module name="product-service" />
+        <module name="user-service" />
         <module name="eureka-server" />
         <module name="file-service" />
         <module name="gateway" />

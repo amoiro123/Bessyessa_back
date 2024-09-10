@@ -28,5 +28,11 @@ public class Product {
     @Column(nullable = false)
     private boolean available = true;
 
+    @Column(nullable = false)
+    private String description;
+
+   // @Column(nullable = false)
+    private String imageId;
+
 }
 

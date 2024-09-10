@@ -10,4 +10,6 @@ public class ProductResponseDTO {
     private String name;
     private ProductType type;
     private boolean available;
+    private String description;
+    private String imageId;
 }

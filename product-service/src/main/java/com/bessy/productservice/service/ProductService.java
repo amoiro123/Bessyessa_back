@@ -1,5 +1,6 @@
 package com.bessy.productservice.service;
 
+import com.bessy.productservice.client.FileStorageClient;
 import com.bessy.productservice.enums.ProductType;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.repository.ProductRepository;
@@ -7,6 +8,7 @@ import com.bessy.productservice.request.ProductRequestDTO;
 import com.bessy.productservice.response.ProductResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +20,22 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO) {
+    @Autowired
+    private FileStorageClient fileStorageClient;
+    public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO, MultipartFile file) {
+        String imageId = null;
+
+        if (file != null) {
+            imageId = fileStorageClient.uploadImageToFIleSystem(file).getBody();
+        }
+
         Product product = new Product();
         product.setName(productRequestDTO.getName());
         product.setType(productRequestDTO.getType());
         product.setAvailable(productRequestDTO.isAvailable());
+        product.setDescription(productRequestDTO.getDescription());
+        product.setImageId(imageId);
+
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
     }
@@ -78,6 +91,8 @@ public class ProductService {
         productResponseDTO.setName(product.getName());
         productResponseDTO.setType(product.getType());
         productResponseDTO.setAvailable(product.isAvailable());
+        productResponseDTO.setImageId(product.getImageId());
+        productResponseDTO.setDescription(product.getDescription());
         return productResponseDTO;
     }
 }

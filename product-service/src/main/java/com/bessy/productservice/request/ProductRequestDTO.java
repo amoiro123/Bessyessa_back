@@ -11,8 +11,26 @@ public class ProductRequestDTO {
     private String name;
     private ProductType type;
     private boolean available;
+    private String description;
+    private String imageId;
+
 
     // Getters and Setters
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getName() {
         return name;
