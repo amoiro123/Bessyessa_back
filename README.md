@@ -1,4 +1,4 @@
-# Spring Boot Microservices Project
+# Bessyessa Project
 (Eureka Server, Config Server, API Gateway, Kafka, File Storage, JWT, Authentication, Authorization, Redis, Docker)
 
 # About the project
