@@ -24,6 +24,9 @@ public class ProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+    public List<Product> findAvailables() {
+        return productRepository.findByIsAvailable(true);
+    }
 
     public Optional<Product> findById(UUID id) {
         return productRepository.findById(id);
