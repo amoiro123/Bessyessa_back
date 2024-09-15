@@ -21,7 +21,7 @@ public class Brand implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "brand", cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     private List<ProductModel> productModel;
 
     private UUID addedBy;  // User who added the product model

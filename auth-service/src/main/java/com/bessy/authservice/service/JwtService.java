@@ -26,16 +26,16 @@ public class JwtService {
     public String generateToken(String username) {
         CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
         Map<String, Object> claims = new HashMap<>();
-        claims.put("USERID", userDetails.getId());
-        claims.put("ROLE", userDetails.getRole());
+//        claims.put("USERID", userDetails.getId());
+//        claims.put("ROLE", userDetails.getRole());
         return createToken(claims, userDetails);
     }
 
-    private String createToken(Map<String, Object> claims, UserDetails userDetails) {
+    private String createToken(Map<String, Object> claims, CustomUserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
-                .setIssuer(userDetails.getAuthorities().iterator().next().getAuthority())
+                .setSubject(userDetails.getId().toString())
+                .setIssuer("ROLE_" + userDetails.getRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();

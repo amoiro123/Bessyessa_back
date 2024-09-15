@@ -1,6 +1,7 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.BrandDTO;
+import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.mappers.BrandMapper;
 import com.bessy.productservice.model.Brand;
 import com.bessy.productservice.service.BrandService;
@@ -33,8 +34,9 @@ public class BrandController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BrandDTO> createBrand(@RequestBody Brand brand) {
-        Brand savedBrand = brandService.save(brand);
+    public ResponseEntity<BrandDTO> createBrand(@RequestBody BrandDTO dto) {
+        dto.setAddedBy(JwtUtil.getCurrentUserID());
+        Brand savedBrand = brandService.save(BrandMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(BrandMapper.INSTANCE.toDto(savedBrand));
     }
 
