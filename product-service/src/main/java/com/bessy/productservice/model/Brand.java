@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Data
 public class Brand implements Serializable {
-// TEST TEST
     @Id
     @GeneratedValue
     private UUID id;

@@ -1,10 +1,10 @@
 package com.bessy.productservice.repository;
 
-import com.bessy.productservice.enums.ProductType;
 import com.bessy.productservice.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.UUID;
 
-import java.util.List;
-
-public interface ProductRepository extends JpaRepository<Product, Long> {
+@Repository
+public interface ProductRepository extends JpaRepository<Product, UUID> {
 }
