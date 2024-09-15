@@ -1,6 +1,6 @@
 package com.bessy.productservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,7 +32,7 @@ public class Product implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_model_id")
-    @JsonIgnoreProperties({"products"})
+    @JsonIncludeProperties({"name", "id"})
     private ProductModel productModel;
 
     @PrePersist

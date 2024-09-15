@@ -2,6 +2,7 @@ package com.bessy.productservice.dto;
 
 import com.bessy.productservice.enums.ProductType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class BrandDTO {
     private UUID id;
     private String name;
     private String description;
-    @JsonIgnoreProperties({"brand"})
+    @JsonIncludeProperties({"name", "id"})
     private List<ProductModelDTO> productModel;
     private UUID addedBy;
     private ProductType productType;
