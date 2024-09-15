@@ -26,6 +26,11 @@ public class ProductController {
         return productService.findAll().stream().map(ProductMapper.INSTANCE::toDto).toList();
     }
 
+    @GetMapping("/available")
+    public List<ProductDTO> getAvailable() {
+        return productService.findAvailables().stream().map(ProductMapper.INSTANCE::toDto).toList();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
         Optional<Product> product = productService.findById(id);
