@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: file-1
+      author: file-storage-service
+      changes:
+        - sqlFile:
+            path: classpath:/db/changelog/sql/file.sql
+            relativeToChangelogFile: false

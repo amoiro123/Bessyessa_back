@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -41,7 +42,7 @@ public class UserService {
         return userRepository.findAllByActive(Active.ACTIVE);
     }
 
-    public User getUserById(String id) {
+    public User getUserById(UUID id) {
         return findUserById(id);
     }
 
@@ -68,7 +69,7 @@ public class UserService {
         return userRepository.save(toUpdate);
     }
 
-    public User updateUserProfilePicture(String id, MultipartFile file) {
+    public User updateUserProfilePicture(UUID id, MultipartFile file) {
         User toUpdate = findUserById(id);
 
         if (toUpdate == null) {
@@ -87,13 +88,13 @@ public class UserService {
     }
 
 
-    public void deleteUserById(String id) {
+    public void deleteUserById(UUID id) {
         User toDelete = findUserById(id);
         toDelete.setActive(Active.INACTIVE);
         userRepository.save(toDelete);
     }
 
-    protected User findUserById(String id) {
+    protected User findUserById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
