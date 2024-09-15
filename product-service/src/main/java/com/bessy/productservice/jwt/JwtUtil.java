@@ -31,9 +31,8 @@ public class JwtUtil {
 
     public static UUID getCurrentUserID() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return UUID.fromString(userDetails.getUsername());
+        if (authentication != null) {
+            return UUID.fromString((String) authentication.getPrincipal());
         }
         return null; // or handle this case as needed
     }

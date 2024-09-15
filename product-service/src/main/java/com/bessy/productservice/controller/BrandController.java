@@ -42,12 +42,11 @@ public class BrandController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BrandDTO> updateBrand(@PathVariable UUID id, @RequestBody Brand brand) {
+    public ResponseEntity<BrandDTO> updateBrand(@PathVariable UUID id, @RequestBody BrandDTO dto) {
         if (brandService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        brand.setId(id);
-        Brand updatedBrand = brandService.save(brand);
+        Brand updatedBrand = brandService.save(BrandMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.ok(BrandMapper.INSTANCE.toDto(updatedBrand));
     }
 

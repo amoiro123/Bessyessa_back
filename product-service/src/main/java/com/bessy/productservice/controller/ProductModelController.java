@@ -1,6 +1,7 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.ProductModelDTO;
+import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.mappers.ProductModelMapper;
 import com.bessy.productservice.model.ProductModel;
 import com.bessy.productservice.service.ProductModelService;
@@ -33,19 +34,19 @@ public class ProductModelController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductModelDTO> createProductModel(@RequestBody ProductModel productModel) {
-        ProductModel savedProductModel = productModelService.save(productModel);
+    public ResponseEntity<ProductModelDTO> createProductModel(@RequestBody ProductModelDTO dto) {
+        dto.setAddedBy(JwtUtil.getCurrentUserID());
+        ProductModel savedProductModel = productModelService.save(ProductModelMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductModelMapper.INSTANCE.toDto(savedProductModel));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductModelDTO> updateProductModel(@PathVariable UUID id, @RequestBody ProductModel productModel) {
+    public ResponseEntity<ProductModelDTO> updateProductModel(@PathVariable UUID id, @RequestBody ProductModelDTO dto) {
         if (productModelService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        productModel.setId(id);
-        ProductModel updatedProductModel = productModelService.save(productModel);
+        ProductModel updatedProductModel = productModelService.save(ProductModelMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.ok(ProductModelMapper.INSTANCE.toDto(updatedProductModel));
     }
 

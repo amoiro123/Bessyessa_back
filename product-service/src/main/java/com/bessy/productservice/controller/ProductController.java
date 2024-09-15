@@ -1,6 +1,7 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.ProductDTO;
+import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.mappers.ProductMapper;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.ProductService;
@@ -33,19 +34,19 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product) {
-        Product savedProduct = productService.save(product);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto) {
+        dto.setPublishedBy(JwtUtil.getCurrentUserID());
+        Product savedProduct = productService.save(ProductMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.INSTANCE.toDto(savedProduct));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody Product product) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO dto) {
         if (productService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        product.setId(id);
-        Product updatedProduct = productService.save(product);
+        Product updatedProduct = productService.save(ProductMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.ok(ProductMapper.INSTANCE.toDto(updatedProduct));
     }
 
