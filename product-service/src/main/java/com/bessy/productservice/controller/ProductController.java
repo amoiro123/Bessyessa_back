@@ -18,36 +18,4 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    @PostMapping("/save")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestPart ProductRequestDTO productRequestDTO,
-                                                            @RequestPart(required = false) MultipartFile file) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productService.createProduct(productRequestDTO, file));
-    }
-
-    @GetMapping
-    public List<ProductResponseDTO> getAllProducts() {
-        return productService.getAllProducts();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<ProductResponseDTO> getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
-    }
-
-    @GetMapping("/type/{type}")
-    public List<ProductResponseDTO> getProductsByType(@PathVariable String type) {
-        return productService.getProductsByType(type);
-    }
-
-    @GetMapping("/available")
-    public List<ProductResponseDTO> getAvailableProducts() {
-        return productService.getAvailableProducts();
-    }
-
-    @PutMapping("/{id}/availability")
-    public ProductResponseDTO updateProductAvailability(@PathVariable Long id, @RequestParam boolean availability) {
-        return productService.updateProductAvailability(id, availability);
-    }
 }

@@ -1,38 +1,40 @@
 package com.bessy.productservice.model;
 
-
-import com.bessy.productservice.enums.ProductType;
 import lombok.*;
 
 import javax.persistence.*;
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Getter
-@Setter
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class Product {
+@Entity
+@Data
+public class Product implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String reference;
+
+    private UUID publishedBy;  // Admin user
+
+    private UUID loanedBy;  // Client user, nullable since it may not be loaned yet
+
+    private boolean isAvailable;
 
     @Column(nullable = false)
-    private String name;
+    private LocalDateTime publishedOn;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ProductType type;
+    private LocalDateTime loanedOn;
 
-    @Column(nullable = false)
-    private boolean available = true;
+    @ManyToOne
+    @JoinColumn(name = "product_model_id")
+    private ProductModel productModel;
 
-    @Column(nullable = false)
-    private String description;
-
-   // @Column(nullable = false)
-    private String imageId;
-
+    @PrePersist
+    public void setPublishedOn() {
+        this.publishedOn = LocalDateTime.now();
+    }
 }
-
