@@ -1,6 +1,7 @@
 package com.bessy.authservice.service;
 
 import com.bessy.authservice.dto.UserDto;
+import com.bessy.authservice.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -54,4 +55,6 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public UUID getId() { return user.getId(); }
+
+    public Role getRole() { return user.getRole(); }
 }
