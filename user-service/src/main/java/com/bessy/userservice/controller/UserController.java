@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -40,7 +41,7 @@ public class UserController {
     }
    // @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getUserById/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(modelMapper.map(userService.getUserById(id), UserDto.class));
     }
 
@@ -82,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping("/update/profile-picture")
-    public ResponseEntity<?> updateUserProfilePicture(@RequestParam String id,
+    public ResponseEntity<?> updateUserProfilePicture(@RequestParam UUID id,
                                                       @RequestPart(required = false) MultipartFile file) {
         try {
             UserDto updatedUser = modelMapper.map(userService.updateUserProfilePicture(id, file), UserDto.class);
@@ -95,7 +96,7 @@ public class UserController {
 
     @DeleteMapping("/deleteUserById/{id}")
    // @PreAuthorize("hasRole('ADMIN') or @userService.getUserById(#id).username == principal")
-    public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id) {
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
     }
