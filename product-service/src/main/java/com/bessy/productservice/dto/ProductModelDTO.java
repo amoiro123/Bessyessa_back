@@ -12,8 +12,7 @@ public class ProductModelDTO {
     private UUID id;
     private String name;
     private String description;
-    private UUID
-    ;
+    private UUID addedBy;
     private LocalDateTime addedOn;
     @JsonIgnoreProperties({"productModel"})
     private List<ProductDTO> products;
