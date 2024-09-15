@@ -1,5 +1,6 @@
 package com.bessy.productservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
@@ -27,13 +28,13 @@ public class ProductModel implements Serializable {
     @Column(nullable = false)
     private LocalDateTime addedOn;
 
-    @JsonIncludeProperties({"reference", "id"})
+    @JsonIgnore
     @OneToMany(mappedBy = "productModel", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<Product> products;
 
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
-    @JsonIncludeProperties({"name", "id"})
+    @JsonIgnore
     private Brand brand;
 
     // Getters, Setters, etc.

@@ -1,6 +1,7 @@
 package com.bessy.productservice.model;
 
 import com.bessy.productservice.enums.ProductType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class Brand implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @JsonIncludeProperties({"name", "id"})
+    @JsonIgnore
     @OneToMany(mappedBy = "brand", cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     private List<ProductModel> productModel;
 
