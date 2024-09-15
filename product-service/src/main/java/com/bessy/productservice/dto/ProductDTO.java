@@ -1,5 +1,6 @@
 package com.bessy.productservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,5 +15,7 @@ public class ProductDTO {
     private boolean isAvailable;
     private LocalDateTime publishedOn;
     private LocalDateTime loanedOn;
+
+    @JsonIgnoreProperties({"products"})
     private ProductModelDTO productModel;
 }

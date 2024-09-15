@@ -1,5 +1,6 @@
 package com.bessy.productservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,8 +12,11 @@ public class ProductModelDTO {
     private UUID id;
     private String name;
     private String description;
-    private UUID addedBy;
+    private UUID
+    ;
     private LocalDateTime addedOn;
+    @JsonIgnoreProperties({"productModel"})
     private List<ProductDTO> products;
+    @JsonIgnoreProperties({"productModel"})
     private BrandDTO brand;
 }

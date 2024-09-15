@@ -26,7 +26,7 @@ public class ProductModel implements Serializable {
     @Column(nullable = false)
     private LocalDateTime addedOn;
 
-    @OneToMany(mappedBy = "productModel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productModel", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<Product> products;
 
     @ManyToOne

@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/product-models")
+@RequestMapping("/v1/product/models")
 public class ProductModelController {
 
     @Autowired
