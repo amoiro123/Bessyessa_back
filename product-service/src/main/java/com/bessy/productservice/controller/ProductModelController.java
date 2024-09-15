@@ -7,6 +7,7 @@ import com.bessy.productservice.service.ProductModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -31,12 +32,14 @@ public class ProductModelController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductModelDTO> createProductModel(@RequestBody ProductModel productModel) {
         ProductModel savedProductModel = productModelService.save(productModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductModelMapper.INSTANCE.toDto(savedProductModel));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductModelDTO> updateProductModel(@PathVariable UUID id, @RequestBody ProductModel productModel) {
         if (productModelService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -47,6 +50,7 @@ public class ProductModelController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProductModel(@PathVariable UUID id) {
         if (productModelService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();

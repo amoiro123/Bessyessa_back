@@ -7,13 +7,14 @@ import com.bessy.productservice.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/brands")
+@RequestMapping("/v1/product/brands")
 public class BrandController {
 
     @Autowired
@@ -31,12 +32,14 @@ public class BrandController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BrandDTO> createBrand(@RequestBody Brand brand) {
         Brand savedBrand = brandService.save(brand);
         return ResponseEntity.status(HttpStatus.CREATED).body(BrandMapper.INSTANCE.toDto(savedBrand));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BrandDTO> updateBrand(@PathVariable UUID id, @RequestBody Brand brand) {
         if (brandService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -47,6 +50,7 @@ public class BrandController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBrand(@PathVariable UUID id) {
         if (brandService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
