@@ -39,9 +39,12 @@ public class StorageService {
     }
 
     public String uploadImageToFileSystem(MultipartFile file) {
-        String uuid = UUID.randomUUID().toString();
-        String filePath = FOLDER_PATH + "/" + uuid;
+        File persistentFile = fileRepository.save(File.builder()
+                .type(file.getContentType())
+                .build());
 
+        UUID uuid = persistentFile.getId();
+        String filePath = FOLDER_PATH + "/" + uuid.toString();
         try {
             file.transferTo(new java.io.File(filePath));
         } catch (IOException e) {
@@ -51,11 +54,10 @@ public class StorageService {
                     .build();
         }
 
-        fileRepository.save(File.builder()
-                .id(uuid)
-                .type(file.getContentType())
-                .filePath(filePath).build());
-        return uuid;
+        persistentFile.setFilePath(filePath);
+        fileRepository.save(persistentFile);
+
+        return uuid.toString();
     }
 
     public byte[] downloadImageFromFileSystem(String id) {

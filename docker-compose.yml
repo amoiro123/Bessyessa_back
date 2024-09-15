@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Bessy_2024
-      POSTGRES_DB: microservice
+      POSTGRES_DB: Bess
     volumes:
         - postgres_data:/var/lib/postgresql/data
     ports:
