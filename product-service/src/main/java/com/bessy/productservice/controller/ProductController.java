@@ -5,6 +5,7 @@ import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.mappers.ProductMapper;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/product")
+@Slf4j
 public class ProductController {
 
     @Autowired
@@ -28,7 +30,13 @@ public class ProductController {
 
     @GetMapping("/available")
     public List<ProductDTO> getAvailable() {
-        return productService.findAvailables().stream().map(ProductMapper.INSTANCE::toDto).toList();
+        return productService.findAvailables(true).stream().map(ProductMapper.INSTANCE::toDto).toList();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/loaned")
+    public List<ProductDTO> getLoaned() {
+        return productService.findAvailables(false).stream().map(ProductMapper.INSTANCE::toDto).toList();
     }
 
     @GetMapping("/{id}")
@@ -40,9 +48,15 @@ public class ProductController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto) {
-        dto.setPublishedBy(JwtUtil.getCurrentUserID());
-        Product savedProduct = productService.save(ProductMapper.INSTANCE.toEntity(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.INSTANCE.toDto(savedProduct));
+        try {
+            dto.setPublishedBy(JwtUtil.getCurrentUserID());
+            dto.setAvailable(true);
+            Product savedProduct = productService.save(ProductMapper.INSTANCE.toEntity(dto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.INSTANCE.toDto(savedProduct));
+        } catch (Exception e){
+            log.error("createProduct - Reference: {} - Error: {} ", dto.getReference(), e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
