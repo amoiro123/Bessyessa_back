@@ -1,7 +1,8 @@
 package com.bessy.productservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,13 +29,13 @@ public class ProductModel implements Serializable {
     @Column(nullable = false)
     private LocalDateTime addedOn;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "productModel", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Product> products;
+//    @JsonManagedReference // Manage the serialization of the products list
+//    @OneToMany(mappedBy = "productModel", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+//    private List<Product> products;
 
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference // Break the recursion by marking this as the back reference
     private Brand brand;
 
     // Getters, Setters, etc.

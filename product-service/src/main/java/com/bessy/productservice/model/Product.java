@@ -1,7 +1,7 @@
 package com.bessy.productservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,7 +33,7 @@ public class Product implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_model_id")
-    @JsonIgnore
+    @JsonBackReference // Break the recursion by marking this as the back reference
     private ProductModel productModel;
 
     @PrePersist

@@ -27,8 +27,8 @@ public class ProductModelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductModelDTO> getProductModelById(@PathVariable UUID id) {
-        Optional<ProductModel> productModel = productModelService.findById(id);
+    public ResponseEntity<ProductModelDTO> getProductModelById(@PathVariable String id) {
+        Optional<ProductModel> productModel = productModelService.findById(UUID.fromString(id));
         return productModel.map(ProductModelMapper.INSTANCE::toDto).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

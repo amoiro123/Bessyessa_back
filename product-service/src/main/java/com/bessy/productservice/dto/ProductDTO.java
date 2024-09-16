@@ -13,8 +13,8 @@ public class ProductDTO {
     private UUID publishedBy;
     private UUID loanedBy;
     private boolean isAvailable;
-    private LocalDateTime publishedOn;
-    private LocalDateTime loanedOn;
+    private String publishedOn;
+    private String loanedOn;
 
     @JsonIncludeProperties({"name", "id"})
     private ProductModelDTO productModel;

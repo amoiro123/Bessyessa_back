@@ -1,9 +1,7 @@
 package com.bessy.productservice.model;
 
 import com.bessy.productservice.enums.ProductType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,9 +22,9 @@ public class Brand implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "brand", cascade = { CascadeType.MERGE, CascadeType.REMOVE })
-    private List<ProductModel> productModel;
+//    @JsonManagedReference // Manage the serialization of the productModel list
+//    @OneToMany(mappedBy = "brand", cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
+//    private List<ProductModel> productModel;
 
     private UUID addedBy;  // User who added the product model
 
