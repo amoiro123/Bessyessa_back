@@ -27,7 +27,4 @@ public class Brand implements Serializable {
 //    private List<ProductModel> productModel;
 
     private UUID addedBy;  // User who added the product model
-
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
 }

@@ -12,5 +12,4 @@ public class BrandDTO {
     private String name;
     private String description;
     private UUID addedBy;
-    private ProductType productType;
 }

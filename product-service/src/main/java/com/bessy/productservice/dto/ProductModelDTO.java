@@ -1,5 +1,6 @@
 package com.bessy.productservice.dto;
 
+import com.bessy.productservice.enums.ProductType;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class ProductModelDTO {
     private String addedOn;
     @JsonIncludeProperties({"name", "id"})
     private BrandDTO brand;
+    private ProductType productType;
 }
