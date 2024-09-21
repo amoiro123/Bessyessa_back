@@ -1,29 +1,29 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.ProductModelDTO;
+import com.bessy.productservice.dto.ProductModelItemDTO;
 import com.bessy.productservice.jwt.JwtUtil;
+import com.bessy.productservice.mappers.ProductModelItemMapper;
 import com.bessy.productservice.mappers.ProductModelMapper;
 import com.bessy.productservice.model.ProductModel;
 import com.bessy.productservice.service.ProductModelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/v1/product/models")
+@RequiredArgsConstructor
 public class ProductModelController {
-
-    @Autowired
-    private ProductModelService productModelService;
+    private final ProductModelService productModelService;
 
     @GetMapping
-    public List<ProductModelDTO> getAllProductModels() {
-        return productModelService.findAll().stream().map(ProductModelMapper.INSTANCE::toDto).toList();
+    public List<ProductModelItemDTO> getAllProductModels() {
+        return ProductModelItemMapper.productModelItemDTOList(productModelService.findAll(), productModelService.findProductModelAvailability());
     }
 
     @GetMapping("/{id}")
