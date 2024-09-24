@@ -7,6 +7,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,12 +31,19 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private LocalDateTime publishedOn;
 
-    private LocalDateTime loanedOn;
+    private LocalDateTime loanedOn; // to remove
 
     @ManyToOne
     @JoinColumn(name = "product_model_id")
     @JsonBackReference // Break the recursion by marking this as the back reference
     private ProductModel productModel;
+
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @JoinColumn(name = "current_price_id", referencedColumnName = "id")
+    private Price currentPrice;
+
+    @OneToMany
+    private List<Price> previousPrices = new ArrayList<>();
 
     @PrePersist
     public void setPublishedOn() {

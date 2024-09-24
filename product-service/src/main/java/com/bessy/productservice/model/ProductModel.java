@@ -35,7 +35,7 @@ public class ProductModel implements Serializable {
 //    private List<Product> products;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id", nullable = false)
+    @JoinColumn(name = "brand_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference // Break the recursion by marking this as the back reference
     private Brand brand;
 
