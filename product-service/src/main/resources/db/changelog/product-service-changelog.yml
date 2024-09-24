@@ -38,3 +38,11 @@ databaseChangeLog:
         - sqlFile:
             path: classpath:db/changelog/sql/price_reservation.sql  # Added classpath prefix
             relativeToChangelogFile: false
+
+  - changeSet:
+      id: product-6
+      author: product-service
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/add-product_id-to-price.sql  # Added classpath prefix
+            relativeToChangelogFile: false

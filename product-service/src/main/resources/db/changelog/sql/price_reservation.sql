@@ -38,7 +38,6 @@ CREATE TABLE reservation (
     user_id UUID,
     price_id UUID,
     product_id UUID,
-    CONSTRAINT fk_reservation_user FOREIGN KEY (user_id) REFERENCES user(id),
     CONSTRAINT fk_reservation_price FOREIGN KEY (price_id) REFERENCES price(id),
     CONSTRAINT fk_reservation_product FOREIGN KEY (product_id) REFERENCES product(id)
 );

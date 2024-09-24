@@ -56,7 +56,6 @@ public class ProductService {
 
             Product product = productOptional.get();
             product.setLoanedBy(JwtUtil.getCurrentUserID());
-            product.setLoanedOn(LocalDateTime.now());
             product.setAvailable(false);
             productRepository.save(product);
         } catch (Exception e){

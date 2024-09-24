@@ -5,8 +5,10 @@ import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.mappers.ProductMapper;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.ProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,14 +20,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/product")
 @Slf4j
+@RequiredArgsConstructor
 public class ProductController {
-
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+    private final ObjectMapper objectMapper;
 
     @GetMapping
     public List<ProductDTO> getAllProducts() {
-        return productService.findAll().stream().map(ProductMapper.INSTANCE::toDto).toList();
+        return productService.findAll().stream().map(p -> objectMapper.convertValue(p, ProductDTO.class)).toList();
     }
 
     @GetMapping("/available")
@@ -42,7 +44,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
         Optional<Product> product = productService.findById(id);
-        return product.map(ProductMapper.INSTANCE::toDto).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return product.map(p -> objectMapper.convertValue(p, ProductDTO.class)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping

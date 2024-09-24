@@ -24,7 +24,7 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private LocalDateTime loanedUntil;
 
-    private UUID user;
+    private UUID userId;
 
     @ManyToOne
     @JoinColumn(name = "price_id", referencedColumnName = "id")

@@ -11,10 +11,8 @@ public interface ProductMapper extends MapperUtil {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     @Mapping(source = "publishedOn", target = "publishedOn", qualifiedByName = "localDateTimeToString")
-    @Mapping(source = "loanedOn", target = "loanedOn", qualifiedByName = "localDateTimeToString")
     ProductDTO toDto(Product product);
 
     @Mapping(source = "publishedOn", target = "publishedOn", qualifiedByName = "stringToLocalDateTime")
-    @Mapping(source = "loanedOn", target = "loanedOn", qualifiedByName = "stringToLocalDateTime")
     Product toEntity(ProductDTO productDTO);
 }

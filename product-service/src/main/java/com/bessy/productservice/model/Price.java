@@ -1,6 +1,8 @@
 package com.bessy.productservice.model;
 
 import com.bessy.productservice.enums.PriceCurrency;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,4 +21,9 @@ public class Price implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private PriceCurrency currency;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
+    private Product product;
 }
