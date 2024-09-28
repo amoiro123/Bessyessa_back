@@ -12,4 +12,8 @@ public class PriceDTO {
     private PriceCurrency currency;
     @JsonIncludeProperties({"id", "reference"})
     private ProductDTO product;
+
+    private UUID addedBy;
+
+    private String addedOn;
 }

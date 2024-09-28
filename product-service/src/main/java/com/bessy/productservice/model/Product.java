@@ -1,9 +1,6 @@
 package com.bessy.productservice.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,8 +40,8 @@ public class Product implements Serializable {
     @JsonIncludeProperties({"amount", "currency"})
     private Price currentPrice;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIncludeProperties({"amount", "currency"})
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIncludeProperties({"amount", "currency", "addedOn"})
     private List<Price> previousPrices = new ArrayList<>();
 
     @PrePersist
