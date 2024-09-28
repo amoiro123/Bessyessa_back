@@ -2,11 +2,9 @@ package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.ProductDTO;
 import com.bessy.productservice.jwt.JwtUtil;
-import com.bessy.productservice.mappers.ProductMapper;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

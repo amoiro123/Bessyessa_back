@@ -1,11 +1,9 @@
 package com.bessy.productservice.controller;
 
-import com.bessy.productservice.dto.ProductDTO;
 import com.bessy.productservice.dto.ProductModelDTO;
 import com.bessy.productservice.dto.ProductModelItemDTO;
 import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.mappers.ProductModelItemMapper;
-import com.bessy.productservice.mappers.ProductModelMapper;
 import com.bessy.productservice.model.ProductModel;
 import com.bessy.productservice.service.ProductModelService;
 import com.fasterxml.jackson.databind.ObjectMapper;

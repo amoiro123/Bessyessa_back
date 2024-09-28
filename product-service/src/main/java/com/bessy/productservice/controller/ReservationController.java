@@ -1,8 +1,6 @@
 package com.bessy.productservice.controller;
 
-import com.bessy.productservice.dto.BrandDTO;
 import com.bessy.productservice.dto.ReservationDTO;
-import com.bessy.productservice.mappers.ReservationMapper;
 import com.bessy.productservice.model.Reservation;
 import com.bessy.productservice.service.ReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
