@@ -32,13 +32,13 @@ public class ProductController {
 
     @GetMapping("/available")
     public List<ProductDTO> getAvailable() {
-        return productService.findAvailables(true).stream().map(ProductMapper.INSTANCE::toDto).toList();
+        return productService.findAvailables(true).stream().map(p -> objectMapper.convertValue(p, ProductDTO.class)).toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/loaned")
     public List<ProductDTO> getLoaned() {
-        return productService.findAvailables(false).stream().map(ProductMapper.INSTANCE::toDto).toList();
+        return productService.findAvailables(false).stream().map(p -> objectMapper.convertValue(p, ProductDTO.class)).toList();
     }
 
     @GetMapping("/{id}")
@@ -53,8 +53,8 @@ public class ProductController {
         try {
             dto.setPublishedBy(JwtUtil.getCurrentUserID());
             dto.setAvailable(true);
-            Product savedProduct = productService.save(ProductMapper.INSTANCE.toEntity(dto));
-            return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.INSTANCE.toDto(savedProduct));
+            Product savedProduct = productService.save(objectMapper.convertValue(dto, Product.class));
+            return ResponseEntity.status(HttpStatus.CREATED).body(objectMapper.convertValue(savedProduct, ProductDTO.class));
         } catch (Exception e){
             log.error("createProduct - Reference: {} - Error: {} ", dto.getReference(), e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -67,8 +67,8 @@ public class ProductController {
         if (productService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Product updatedProduct = productService.save(ProductMapper.INSTANCE.toEntity(dto));
-        return ResponseEntity.ok(ProductMapper.INSTANCE.toDto(updatedProduct));
+        Product updatedProduct = productService.save(objectMapper.convertValue(dto, Product.class));
+        return ResponseEntity.ok(objectMapper.convertValue(updatedProduct, ProductDTO.class));
     }
 
     @DeleteMapping("/{id}")
