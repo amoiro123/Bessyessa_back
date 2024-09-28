@@ -1,9 +1,9 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.PriceDTO;
-import com.bessy.productservice.mappers.PriceMapper;
 import com.bessy.productservice.model.Price;
 import com.bessy.productservice.service.PriceService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,27 +17,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PriceController {
     private final PriceService priceService;
+    private final ObjectMapper objectMapper;
 
     // Create or Update a Price
     @PostMapping
     public ResponseEntity<PriceDTO> createOrUpdatePrice(@RequestBody PriceDTO dto) {
-        Price savedPrice = priceService.savePrice(PriceMapper.INSTANCE.toEntity(dto));
-
-        return new ResponseEntity<>(PriceMapper.INSTANCE.toDto(savedPrice), HttpStatus.CREATED);
+        Price savedPrice = priceService.savePrice(objectMapper.convertValue(dto, Price.class));
+        return new ResponseEntity<>(objectMapper.convertValue(savedPrice, PriceDTO.class), HttpStatus.CREATED);
     }
 
     // Get a Price by ID
     @GetMapping("/{id}")
     public ResponseEntity<PriceDTO> getPriceById(@PathVariable UUID id) {
         Price price = priceService.getPriceById(id);
-        return new ResponseEntity<>(PriceMapper.INSTANCE.toDto(price), HttpStatus.OK);
+        return new ResponseEntity<>(objectMapper.convertValue(price, PriceDTO.class), HttpStatus.OK);
     }
 
     // Get all Prices
     @GetMapping
     public ResponseEntity<List<PriceDTO>> getAllPrices() {
         List<Price> prices = priceService.getAllPrices();
-        return new ResponseEntity<>(prices.stream().map(PriceMapper.INSTANCE::toDto).toList(), HttpStatus.OK);
+        return new ResponseEntity<>(prices.stream().map(price -> objectMapper.convertValue(price, PriceDTO.class)).toList(), HttpStatus.OK);
     }
 
     // Delete a Price by ID

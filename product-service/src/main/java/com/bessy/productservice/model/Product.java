@@ -34,8 +34,8 @@ public class Product implements Serializable {
     private LocalDateTime publishedOn;
 
     @ManyToOne
-    @JoinColumn(name = "product_model_id")
-    @JsonBackReference // Break the recursion by marking this as the back reference
+    @JoinColumn(name = "product_model_id", referencedColumnName = "id")
+    @JsonIncludeProperties({"name", "id", "brand"})
     private ProductModel productModel;
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
@@ -44,7 +44,7 @@ public class Product implements Serializable {
     private Price currentPrice;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Manage the serialization of the products list
+    @JsonIncludeProperties({"amount", "currency"})
     private List<Price> previousPrices = new ArrayList<>();
 
     @PrePersist

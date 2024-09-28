@@ -1,6 +1,7 @@
 package com.bessy.productservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
 import java.util.UUID;
@@ -8,13 +9,13 @@ import java.util.UUID;
 @Data
 public class ReservationDTO {
     private UUID id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private String loanedOn;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private String loanedFrom;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private String loanedUntil;
     private UUID userId;
+
+    @JsonIncludeProperties({"amount", "currency"})
     private PriceDTO price;
+    @JsonIncludeProperties({"reference", "id", "productModel"})
     private ProductDTO product;
 }

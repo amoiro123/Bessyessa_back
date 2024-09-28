@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -15,7 +14,7 @@ public class ProductDTO {
     private UUID publishedBy;
     private UUID loanedBy;
     private boolean isAvailable;
-    private LocalDateTime publishedOn;
+    private String publishedOn;
 
     @JsonIncludeProperties({"name", "id"})
     private ProductModelDTO productModel;

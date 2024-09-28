@@ -1,5 +1,6 @@
 package com.bessy.productservice.controller;
 
+import com.bessy.productservice.dto.ProductDTO;
 import com.bessy.productservice.dto.ProductModelDTO;
 import com.bessy.productservice.dto.ProductModelItemDTO;
 import com.bessy.productservice.jwt.JwtUtil;
@@ -7,6 +8,7 @@ import com.bessy.productservice.mappers.ProductModelItemMapper;
 import com.bessy.productservice.mappers.ProductModelMapper;
 import com.bessy.productservice.model.ProductModel;
 import com.bessy.productservice.service.ProductModelService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductModelController {
     private final ProductModelService productModelService;
+    private final ObjectMapper objectMapper;
 
     @GetMapping
     public List<ProductModelItemDTO> getAllProductModels() {
@@ -29,15 +32,15 @@ public class ProductModelController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductModelDTO> getProductModelById(@PathVariable String id) {
         Optional<ProductModel> productModel = productModelService.findById(UUID.fromString(id));
-        return productModel.map(ProductModelMapper.INSTANCE::toDto).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return productModel.map(p -> objectMapper.convertValue(p, ProductModelDTO.class)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductModelDTO> createProductModel(@RequestBody ProductModelDTO dto) {
         dto.setAddedBy(JwtUtil.getCurrentUserID());
-        ProductModel savedProductModel = productModelService.save(ProductModelMapper.INSTANCE.toEntity(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProductModelMapper.INSTANCE.toDto(savedProductModel));
+        ProductModel savedProductModel = productModelService.save(objectMapper.convertValue(dto, ProductModel.class));
+        return ResponseEntity.status(HttpStatus.CREATED).body(objectMapper.convertValue(savedProductModel, ProductModelDTO.class));
     }
 
     @PutMapping("/{id}")
@@ -46,8 +49,8 @@ public class ProductModelController {
         if (productModelService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        ProductModel updatedProductModel = productModelService.save(ProductModelMapper.INSTANCE.toEntity(dto));
-        return ResponseEntity.ok(ProductModelMapper.INSTANCE.toDto(updatedProductModel));
+        ProductModel updatedProductModel = productModelService.save(objectMapper.convertValue(dto, ProductModel.class));
+        return ResponseEntity.ok(objectMapper.convertValue(updatedProductModel, ProductModelDTO.class));
     }
 
     @DeleteMapping("/{id}")

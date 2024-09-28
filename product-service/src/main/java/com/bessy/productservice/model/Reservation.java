@@ -1,5 +1,6 @@
 package com.bessy.productservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,9 +29,11 @@ public class Reservation implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "price_id", referencedColumnName = "id")
+    @JsonIncludeProperties({"amount", "currency"})
     private Price price;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JsonIncludeProperties({"reference", "id", "productModel"})
     private Product product;
 }

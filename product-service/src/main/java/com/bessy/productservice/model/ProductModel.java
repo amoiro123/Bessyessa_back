@@ -3,6 +3,7 @@ package com.bessy.productservice.model;
 import com.bessy.productservice.enums.ProductType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
@@ -36,7 +37,7 @@ public class ProductModel implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "brand_id", referencedColumnName = "id", nullable = false)
-    @JsonBackReference // Break the recursion by marking this as the back reference
+    @JsonIncludeProperties({"id", "name"})
     private Brand brand;
 
     @Enumerated(EnumType.STRING)
