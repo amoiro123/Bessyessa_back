@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -130,6 +131,60 @@ public class StorageService {
             log.error("Error deleting existing file: {}", e.getMessage());
             throw e;
         }
+    }
+
+    // Method to fetch and download the file by UUID
+    public void fetchFile(String folderId, UUID uuid, HttpServletResponse response) {
+        try {
+            // Define the base directory for uploads (outside of src/main/resources)
+            Path baseDirectoryPath = Paths.get(FOLDER_PATH);
+
+            // Create a subdirectory if folderId is provided
+            Path directoryPath = Objects.nonNull(folderId)
+                    ? baseDirectoryPath.resolve(folderId)
+                    : baseDirectoryPath;
+
+            // Find the file with the same UUID (ignoring extension)
+            Path filePath = findFileByUUID(directoryPath, uuid);
+
+            if (filePath == null) {
+                log.error("File not found for UUID: {}", uuid);
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+                response.getWriter().write("File not found");
+                return;
+            }
+
+            // Set the content type and file download headers
+            response.setContentType(Files.probeContentType(filePath));  // Automatically detect content type
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + filePath.getFileName() + "\"");
+
+            // Write the file to the HTTP response output stream
+            Files.copy(filePath, response.getOutputStream());
+            response.flushBuffer();
+
+        } catch (IOException e) {
+            log.error("fetchFile error: {}", e.getMessage());
+            try {
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write("Unable to fetch file");
+            } catch (IOException ioException) {
+                log.error("Error writing error response: {}", ioException.getMessage());
+            }
+        }
+    }
+
+    // Helper method to find the file by UUID in the directory (ignores file extension)
+    private Path findFileByUUID(Path directoryPath, UUID uuid) throws IOException {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directoryPath, uuid.toString() + "*")) {
+            for (Path entry : stream) {
+                log.info("Found file: {}", entry.getFileName());
+                return entry; // Return the first matching file (UUID matches)
+            }
+        } catch (IOException e) {
+            log.error("Error finding file by UUID: {}", e.getMessage());
+            throw e;
+        }
+        return null; // No file found with the given UUID
     }
 
     public byte[] downloadImageFromFileSystem(String id) {

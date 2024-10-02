@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/file-storage")
 @RequiredArgsConstructor
@@ -28,6 +31,15 @@ public class StorageController {
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf("image/png"))
                 .body(storageService.downloadImageFromFileSystem(id));
+    }
+
+
+    @GetMapping("/download/{folderId}/{uuid}")
+    public void downloadFile(
+            @PathVariable String folderId,
+            @PathVariable UUID uuid,
+            HttpServletResponse response) {
+        storageService.fetchFile(folderId, uuid, response);
     }
 
     @DeleteMapping("/delete/{id}")
