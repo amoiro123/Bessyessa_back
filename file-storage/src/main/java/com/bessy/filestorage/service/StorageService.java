@@ -1,5 +1,6 @@
 package com.bessy.filestorage.service;
 
+import com.bessy.filestorage.enums.EntityFolder;
 import com.bessy.filestorage.exc.GenericErrorResponse;
 import com.bessy.filestorage.model.File;
 import com.bessy.filestorage.repository.FileRepository;
@@ -219,5 +220,15 @@ public class StorageService {
                         .message("File not found")
                         .httpStatus(HttpStatus.NOT_FOUND)
                         .build());
+    }
+
+    // Method to check if the folderId is valid based on the EntityFolder enum
+    public boolean isValidEntityFolder(String folderId) {
+        try {
+            EntityFolder.valueOf(folderId.toUpperCase()); // Check if folderId is a valid enum constant
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false; // folderId is not in the enum
+        }
     }
 }
