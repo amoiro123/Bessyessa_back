@@ -18,6 +18,11 @@ public class StorageController {
         return ResponseEntity.ok().body(storageService.uploadImageToFileSystem(file));
     }
 
+    @PostMapping("/upload/{folderId}/{resourceId}")
+    public ResponseEntity<String> uploadImageToSpecificFolder(@PathVariable("folderId") String folderId, @PathVariable("resourceId") String resourceId, @RequestPart("image") MultipartFile file) {
+        return ResponseEntity.ok().body(storageService.uploadImageToSpecificFolder(folderId, resourceId, file));
+    }
+
     @GetMapping("/download/{id}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String id) {
         return ResponseEntity.ok()
