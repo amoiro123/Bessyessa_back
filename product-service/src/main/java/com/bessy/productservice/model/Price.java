@@ -31,4 +31,9 @@ public class Price implements Serializable {
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     @JsonIncludeProperties({"id", "reference"})
     private Product product;
+
+    @PrePersist
+    public void setAddedOn() {
+        this.addedOn = LocalDateTime.now();
+    }
 }

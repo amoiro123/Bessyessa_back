@@ -1,6 +1,7 @@
 package com.bessy.productservice.dto;
 
 import com.bessy.productservice.model.Price;
+import com.bessy.productservice.model.Reservation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Data;
@@ -27,4 +28,7 @@ public class ProductDTO {
 
     @JsonIncludeProperties({"amount", "currency", "addedOn"})
     private List<PriceDTO> previousPrices = new ArrayList<>();
+
+    @JsonIncludeProperties({"id", "loanedOn", "userId", "loanedFrom", "loanedUntil"})
+    private List<ReservationDTO> reservations = new ArrayList<>();
 }

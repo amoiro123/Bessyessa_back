@@ -44,6 +44,11 @@ public class Product implements Serializable {
     @JsonIncludeProperties({"amount", "currency", "addedOn"})
     private List<Price> previousPrices = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "product", cascade = {}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIncludeProperties({"id", "loanedOn", "userId", "loanedFrom", "loanedUntil"})
+    private List<Reservation> reservations = new ArrayList<>();
+
     @PrePersist
     public void setPublishedOn() {
         this.publishedOn = LocalDateTime.now();

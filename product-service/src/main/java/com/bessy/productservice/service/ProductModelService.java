@@ -34,6 +34,6 @@ public class ProductModelService {
     public List<ProductModelAvailabilityDTO> findProductModelAvailability(){
         List<Object[]> result = productModelRepository.findProductModelAvailability();
         return result.stream()
-                .map(res -> new ProductModelAvailabilityDTO(res[0].toString(), (Long) res[1], (Long) res[2])).toList();
+                .map(res -> new ProductModelAvailabilityDTO(res[0].toString(), (Long) res[1], (Long) res[2], (Double) res[3], (Double) res[4])).toList();
     }
 }

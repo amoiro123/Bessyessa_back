@@ -11,6 +11,8 @@ public class ProductModelItemDTO {
     private String brandName;
     private String type;
     private boolean hasAvailable;
-    public Long availableCount;
-    public Long totalCount;
+    private Long availableCount;
+    private Long totalCount;
+    private Double minPrice;
+    private Double maxPrice;
 }

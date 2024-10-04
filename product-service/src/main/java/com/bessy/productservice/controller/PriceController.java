@@ -3,6 +3,7 @@ package com.bessy.productservice.controller;
 import com.bessy.productservice.dto.PriceDTO;
 import com.bessy.productservice.exc.GenericErrorResponse;
 import com.bessy.productservice.exc.NotFoundException;
+import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.model.Price;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.PriceService;
@@ -36,8 +37,9 @@ public class PriceController {
             UUID id = dto.getProduct().getId();
             Optional<Product> productOptional = productService.findById(id);
             if(productOptional.isEmpty())
-                throw new NotFoundException(String.format(" Product id %s not found", id));
+                throw new NotFoundException(String.format("Product id %s not found", id));
             Product product = productOptional.get();
+            dto.setAddedBy(JwtUtil.getCurrentUserID());
             Price savedPrice = priceService.savePrice(objectMapper.convertValue(dto, Price.class));
             product.setCurrentPrice(savedPrice);
             product = productService.save(product);
