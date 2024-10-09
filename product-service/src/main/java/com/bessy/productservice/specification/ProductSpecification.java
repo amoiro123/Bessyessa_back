@@ -43,13 +43,28 @@ public class ProductSpecification {
                         criteriaBuilder.lessThanOrEqualTo(priceJoin.get("amount"), filterDTO.getMaxPrice()));
             }
 
-            if (filterDTO.getLoanFrom() != null || filterDTO.getLoanUntil() != null) {
-                Join<Product, Reservation> reservationJoin = root.join("reservations", JoinType.LEFT);
-                predicate = criteriaBuilder.or(
-                        criteriaBuilder.lessThan(reservationJoin.get("loanedUntil"), filterDTO.getLoanUntil()),
-                        criteriaBuilder.greaterThan(reservationJoin.get("loanedFrom"), filterDTO.getLoanFrom())
+            if (filterDTO.getLoanUntil() != null && filterDTO.getLoanFrom() != null) {
+                Join<Product, Reservation> reservationJoin = root.join("reservations");
+
+                // Check if filterDTO.getLoanFrom() is within any reservation period
+                Predicate loanFromWithinReservation = criteriaBuilder.and(
+                        criteriaBuilder.greaterThanOrEqualTo(reservationJoin.get("loanedUntil"), filterDTO.getLoanFrom()),
+                        criteriaBuilder.lessThanOrEqualTo(reservationJoin.get("loanedFrom"), filterDTO.getLoanFrom())
                 );
+
+                // Check if filterDTO.getLoanUntil() is within any reservation period
+                Predicate loanUntilWithinReservation = criteriaBuilder.and(
+                        criteriaBuilder.greaterThanOrEqualTo(reservationJoin.get("loanedUntil"), filterDTO.getLoanUntil()),
+                        criteriaBuilder.lessThanOrEqualTo(reservationJoin.get("loanedFrom"), filterDTO.getLoanUntil())
+                );
+
+                // Exclude products if either loanFrom or loanUntil fall within an existing reservation
+                Predicate dateOverlap = criteriaBuilder.and(loanFromWithinReservation, loanUntilWithinReservation);
+
+                // Add NOT condition to exclude overlapping reservations
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.not(dateOverlap));
             }
+
             return predicate;
         };
     }

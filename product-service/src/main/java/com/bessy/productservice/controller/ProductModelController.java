@@ -1,5 +1,6 @@
 package com.bessy.productservice.controller;
 
+import com.bessy.productservice.dto.ItemDTO;
 import com.bessy.productservice.dto.ProductModelDTO;
 import com.bessy.productservice.dto.ProductModelItemDTO;
 import com.bessy.productservice.jwt.JwtUtil;
@@ -25,6 +26,11 @@ public class ProductModelController {
     @GetMapping
     public List<ProductModelItemDTO> getAllProductModels() {
         return ProductModelItemMapper.productModelItemDTOList(productModelService.findAll(), productModelService.findProductModelAvailability());
+    }
+
+    @GetMapping("/items")
+    public List<ItemDTO> getProductModelsDropdown() {
+        return productModelService.findAll().stream().map(m -> objectMapper.convertValue(m, ItemDTO.class)).toList();
     }
 
     @GetMapping("/{id}")

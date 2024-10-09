@@ -1,6 +1,7 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.ProductDTO;
+import com.bessy.productservice.dto.ProductItemDTO;
 import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.ProductService;
@@ -43,6 +44,12 @@ public class ProductController {
     public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
         Optional<Product> product = productService.findById(id);
         return product.map(p -> objectMapper.convertValue(p, ProductDTO.class)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/by-model/{id}")
+    public ResponseEntity<List<ProductItemDTO>> getProductByModelId(@PathVariable UUID id) {
+        List<Product> products = productService.findByProductModelIdId(id);
+        return ResponseEntity.ok(products.stream().map(p -> objectMapper.convertValue(p, ProductItemDTO.class)).toList());
     }
 
     @PostMapping

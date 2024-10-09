@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findByIsAvailable(boolean isAvailable);
     Optional<Product> findByIdAndIsAvailable(UUID id, boolean isAvailable);
+
+    List<Product> findByProductModelId(UUID id);
 }

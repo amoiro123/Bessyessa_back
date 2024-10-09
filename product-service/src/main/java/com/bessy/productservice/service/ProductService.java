@@ -39,6 +39,10 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    public List<Product> findByProductModelIdId(UUID id) {
+        return productRepository.findByProductModelId(id);
+    }
+
     public Product save(Product product) {
         return productRepository.save(product);
     }
