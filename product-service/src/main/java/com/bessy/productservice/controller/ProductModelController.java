@@ -57,10 +57,11 @@ public class ProductModelController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductModelDTO> updateProductModel(@PathVariable UUID id, @RequestBody ProductModelDTO dto) {
-        if (productModelService.findById(id).isEmpty()) {
+        Optional<ProductModel> existing = productModelService.findById(id);
+        if (existing.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        ProductModel updatedProductModel = productModelService.save(objectMapper.convertValue(dto, ProductModel.class));
+        ProductModel updatedProductModel = productModelService.update(existing.get(), objectMapper.convertValue(dto, ProductModel.class));
         return ResponseEntity.ok(objectMapper.convertValue(updatedProductModel, ProductModelDTO.class));
     }
 
