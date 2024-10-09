@@ -3,7 +3,9 @@ package com.bessy.productservice.controller;
 import com.bessy.productservice.dto.ItemDTO;
 import com.bessy.productservice.dto.ProductModelDTO;
 import com.bessy.productservice.dto.ProductModelItemDTO;
+import com.bessy.productservice.enums.ProductType;
 import com.bessy.productservice.jwt.JwtUtil;
+import com.bessy.productservice.mappers.DropdownItemMapper;
 import com.bessy.productservice.mappers.ProductModelItemMapper;
 import com.bessy.productservice.model.ProductModel;
 import com.bessy.productservice.service.ProductModelService;
@@ -30,7 +32,12 @@ public class ProductModelController {
 
     @GetMapping("/items")
     public List<ItemDTO> getProductModelsDropdown() {
-        return productModelService.findAll().stream().map(m -> objectMapper.convertValue(m, ItemDTO.class)).toList();
+        return productModelService.findAll().stream().map(DropdownItemMapper::mapToItemDTO).toList();
+    }
+
+    @GetMapping("/categories")
+    public List<ProductType> getProductModelCategories() {
+        return List.of(ProductType.values());
     }
 
     @GetMapping("/{id}")
