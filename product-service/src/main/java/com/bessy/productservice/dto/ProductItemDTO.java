@@ -14,7 +14,7 @@ public class ProductItemDTO {
     private UUID id;
     private String reference;
 
-    @JsonIncludeProperties({"amount", "currency"})
+    @JsonIncludeProperties({"id", "amount", "currency"})
     private PriceDTO currentPrice;
 
     @JsonIncludeProperties({"id", "loanedFrom", "loanedUntil"})

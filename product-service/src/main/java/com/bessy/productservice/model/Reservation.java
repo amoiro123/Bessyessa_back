@@ -27,12 +27,12 @@ public class Reservation implements Serializable {
 
     private UUID userId;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
     @JoinColumn(name = "price_id", referencedColumnName = "id")
-    @JsonIncludeProperties({"amount", "currency"})
+    @JsonIncludeProperties({ "id", "amount", "currency"})
     private Price price;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @JsonIncludeProperties({"reference", "id", "productModel"})
     private Product product;

@@ -1,6 +1,7 @@
 package com.bessy.productservice.controller;
 
 import com.bessy.productservice.dto.ReservationDTO;
+import com.bessy.productservice.jwt.JwtUtil;
 import com.bessy.productservice.model.Reservation;
 import com.bessy.productservice.service.ReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +24,10 @@ public class ReservationController {
     // Create or Update a Reservation
     @PostMapping
     public ResponseEntity<ReservationDTO> createOrUpdateReservation(@RequestBody ReservationDTO dto) {
-        Reservation savedReservation = reservationService.saveReservation(objectMapper.convertValue(dto, Reservation.class));
+        dto.setUserId(JwtUtil.getCurrentUserID());
+        Reservation reservation = objectMapper.convertValue(dto, Reservation.class);
+        reservation.setLoanedOn(LocalDateTime.now());
+        Reservation savedReservation = reservationService.saveReservation(reservation);
         return new ResponseEntity<>(objectMapper.convertValue(savedReservation, ReservationDTO.class), HttpStatus.CREATED);
     }
 

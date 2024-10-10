@@ -37,7 +37,7 @@ public class Product implements Serializable {
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "current_price_id", referencedColumnName = "id")
-    @JsonIncludeProperties({"amount", "currency"})
+    @JsonIncludeProperties({"id", "amount", "currency"})
     private Price currentPrice;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

@@ -3,6 +3,7 @@ package com.bessy.productservice.controller;
 import com.bessy.productservice.dto.ProductDTO;
 import com.bessy.productservice.dto.ProductItemDTO;
 import com.bessy.productservice.jwt.JwtUtil;
+import com.bessy.productservice.model.Price;
 import com.bessy.productservice.model.Product;
 import com.bessy.productservice.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +70,8 @@ public class ProductController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO dto) {
-        if (productService.findById(id).isEmpty()) {
+        Optional<Product> op = productService.findById(id);
+        if (op.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         Product updatedProduct = productService.save(objectMapper.convertValue(dto, Product.class));

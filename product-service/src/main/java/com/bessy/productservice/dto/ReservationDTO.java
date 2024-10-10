@@ -14,7 +14,7 @@ public class ReservationDTO {
     private String loanedUntil;
     private UUID userId;
 
-    @JsonIncludeProperties({"amount", "currency"})
+    @JsonIncludeProperties({"id", "amount", "currency"})
     private PriceDTO price;
     @JsonIncludeProperties({"reference", "id", "productModel"})
     private ProductDTO product;
