@@ -4,5 +4,6 @@ public enum EntityFolder {
     BRANDS,
     MODELS,
     USERS,
+    PRODUCTS,
     FORMATIONS
 }
