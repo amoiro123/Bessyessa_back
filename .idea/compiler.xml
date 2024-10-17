@@ -10,7 +10,8 @@
         <module name="job-service" />
         <module name="config-server" />
         <module name="auth-service" />
-        <module name="product-service" />
+        <module name="formation-service" />
+        <module name="video-service" />
         <module name="user-service" />
         <module name="eureka-server" />
         <module name="file-service" />
@@ -23,12 +24,16 @@
       <module name="chat-service" target="17" />
       <module name="contact-service" target="17" />
       <module name="file-service" target="17" />
+      <module name="Formation-service" target="17" />
+      <module name="product-service (1)" target="17" />
+      <module name="product-service (2)" target="17" />
       <module name="user-service (1)" target="17" />
       <module name="user-service (2)" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Formation-service" options="-parameters" />
       <module name="auth-service" options="-parameters" />
       <module name="chat-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
@@ -36,13 +41,17 @@
       <module name="eureka-server" options="-parameters" />
       <module name="file-service" options="-parameters" />
       <module name="file-storage" options="-parameters" />
+      <module name="formation-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="job-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
+      <module name="product-service (1)" options="-parameters" />
+      <module name="product-service (2)" options="-parameters" />
       <module name="user-service" options="-parameters" />
       <module name="user-service (1)" options="-parameters" />
       <module name="user-service (2)" options="-parameters" />
+      <module name="video-service" options="-parameters" />
     </option>
   </component>
 </project>
