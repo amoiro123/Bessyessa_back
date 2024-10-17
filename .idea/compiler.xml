@@ -10,8 +10,8 @@
         <module name="job-service" />
         <module name="config-server" />
         <module name="auth-service" />
-        <module name="formation-service" />
         <module name="video-service" />
+        <module name="product-service" />
         <module name="user-service" />
         <module name="eureka-server" />
         <module name="file-service" />
@@ -24,6 +24,7 @@
       <module name="chat-service" target="17" />
       <module name="contact-service" target="17" />
       <module name="file-service" target="17" />
+      <module name="formation-service" target="17" />
       <module name="Formation-service" target="17" />
       <module name="product-service (1)" target="17" />
       <module name="product-service (2)" target="17" />
