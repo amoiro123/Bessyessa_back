@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Formation" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.bessy.formationservice.FormationServiceApplication" />
+    <module name="formation-service" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

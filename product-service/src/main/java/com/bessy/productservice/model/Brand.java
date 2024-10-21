@@ -1,6 +1,7 @@
 package com.bessy.productservice.model;
 
 import com.bessy.productservice.enums.ProductType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,7 +12,6 @@ import java.util.UUID;
 @Entity
 @Data
 public class Brand implements Serializable {
-// TEST TEST
     @Id
     @GeneratedValue
     private UUID id;
@@ -22,11 +22,9 @@ public class Brand implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
-    private List<ProductModel> productModel;
+//    @JsonManagedReference // Manage the serialization of the productModel list
+//    @OneToMany(mappedBy = "brand", cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
+//    private List<ProductModel> productModel;
 
     private UUID addedBy;  // User who added the product model
-
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
 }

@@ -22,3 +22,35 @@ databaseChangeLog:
         - sqlFile:
             path: classpath:db/changelog/sql/product.sql  # Added classpath prefix
             relativeToChangelogFile: false
+
+  - changeSet:
+      id: product-4
+      author: product-service
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/fix-product-type.sql  # Added classpath prefix
+            relativeToChangelogFile: false
+
+  - changeSet:
+      id: product-5
+      author: product-service
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/price_reservation.sql  # Added classpath prefix
+            relativeToChangelogFile: false
+
+  - changeSet:
+      id: product-6
+      author: product-service
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/add-product_id-to-price.sql  # Added classpath prefix
+            relativeToChangelogFile: false
+
+  - changeSet:
+      id: product-7
+      author: product-service
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/added-price.sql  # Added classpath prefix
+            relativeToChangelogFile: false

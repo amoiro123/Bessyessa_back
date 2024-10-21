@@ -1,5 +1,10 @@
 package com.bessy.productservice.model;
 
+import com.bessy.productservice.enums.ProductType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,14 +31,17 @@ public class ProductModel implements Serializable {
     @Column(nullable = false)
     private LocalDateTime addedOn;
 
-    @OneToMany(mappedBy = "productModel", cascade = CascadeType.ALL)
-    private List<Product> products;
+//    @JsonManagedReference // Manage the serialization of the products list
+//    @OneToMany(mappedBy = "productModel", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+//    private List<Product> products;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id", nullable = false)
+    @JoinColumn(name = "brand_id", referencedColumnName = "id", nullable = false)
+    @JsonIncludeProperties({"id", "name"})
     private Brand brand;
 
-    // Getters, Setters, etc.
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
 
     @PrePersist
     public void setAddedOn() {

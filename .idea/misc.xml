@@ -20,6 +20,8 @@
         <option value="$PROJECT_DIR$/file-storage/pom.xml" />
         <option value="$PROJECT_DIR$/config-server/pom.xml" />
         <option value="$PROJECT_DIR$/product-service/pom.xml" />
+        <option value="$PROJECT_DIR$/video-service/pom.xml" />
+        <option value="$PROJECT_DIR$/Formation-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
