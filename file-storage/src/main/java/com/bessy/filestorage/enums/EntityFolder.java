@@ -5,5 +5,6 @@ public enum EntityFolder {
     MODELS,
     USERS,
     PRODUCTS,
-    FORMATIONS
+    FORMATIONS,
+    FORMATIONS_IMG
 }

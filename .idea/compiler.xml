@@ -24,7 +24,6 @@
       <module name="chat-service" target="17" />
       <module name="contact-service" target="17" />
       <module name="file-service" target="17" />
-      <module name="formation-service" target="17" />
       <module name="Formation-service" target="17" />
       <module name="product-service (1)" target="17" />
       <module name="product-service (2)" target="17" />
