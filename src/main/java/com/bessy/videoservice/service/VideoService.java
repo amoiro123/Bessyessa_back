@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRange;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +30,23 @@ import static java.nio.file.StandardOpenOption.WRITE;
 @Slf4j
 @RequiredArgsConstructor
 public class VideoService {
+    private String FOLDER_PATH;
 
-    @Value("${data.folder}")
-    private String dataFolder;
+    @PostConstruct
+    public void init() {
+        String currentWorkingDirectory = System.getProperty("user.dir");
+
+        FOLDER_PATH = currentWorkingDirectory + "/video-service/src/main/resources/assets";
+
+        java.io.File targetFolder = new java.io.File(FOLDER_PATH);
+
+        if (!targetFolder.exists()) {
+            boolean directoriesCreated = targetFolder.mkdirs();
+            if (!directoriesCreated) {
+                throw new RuntimeException("Directory not created!!!");
+            }
+        }
+    }
 
     private final VideoMetadataRepository videoRepo;
     private final FrameGrabberService frameGrabberService;
@@ -58,7 +74,7 @@ public class VideoService {
 
         videoRepo.save(metadata);
 
-        Path directory = Path.of(dataFolder, metadata.getId().toString());
+        Path directory = Path.of(FOLDER_PATH, metadata.getId().toString());
         try {
             Files.createDirectory(directory);
             Path file = Path.of(directory.toString(), newVideoRepr.getFile().getOriginalFilename());
@@ -78,7 +94,7 @@ public class VideoService {
         return videoRepo.findById(id)
                 .flatMap(vmd -> {
                     Path previewPicturePath = Path.of(
-                            dataFolder,
+                            FOLDER_PATH,
                             vmd.getId().toString(),
                             getFileNameWithoutExt(vmd.getFileName()) + ".jpeg");
                     if (!Files.exists(previewPicturePath)) {
@@ -100,7 +116,7 @@ public class VideoService {
             return Optional.empty();
         }
 
-        Path filePath = Path.of(dataFolder, String.valueOf(id), vmdById.get().getFileName());
+        Path filePath = Path.of(FOLDER_PATH, String.valueOf(id), vmdById.get().getFileName());
         if (!Files.exists(filePath)) {
             log.error("File {} not found", filePath);
             return Optional.empty();

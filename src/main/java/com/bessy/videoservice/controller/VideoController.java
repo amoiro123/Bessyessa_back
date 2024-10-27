@@ -49,42 +49,44 @@ public class VideoController {
     }
 
     @GetMapping("/stream/{id}")
-   // @CrossOrigin
     public ResponseEntity<StreamingResponseBody> streamVideo(
-            @RequestHeader(value = "Range", required = false) String httpRangeHeader,
-            @PathVariable("id") Long id
-    ) {
+            @RequestHeader(value = "range", required = false) String httpRangeHeader,
+            @PathVariable("id") Long id) {
+
         log.info("Requested range [{}] for file `{}`", httpRangeHeader, id);
 
         List<HttpRange> httpRangeList = HttpRange.parseRanges(httpRangeHeader);
 
+        // Get streaming information for the specific byte range
         StreamBytesInfo streamBytesInfo = videoService
-                .getStreamBytes(id, httpRangeList.size() > 0 ? httpRangeList.get(0) : null)
+                .getStreamBytes(id, !httpRangeList.isEmpty() ? httpRangeList.get(0) : null)
                 .orElseThrow(NotFoundException::new);
 
         long byteLength = streamBytesInfo.getRangeEnd() - streamBytesInfo.getRangeStart() + 1;
 
         ResponseEntity.BodyBuilder builder = ResponseEntity
-                .status(httpRangeList.size() > 0 ? HttpStatus.PARTIAL_CONTENT : HttpStatus.OK)
+                .status(!httpRangeList.isEmpty() ? HttpStatus.PARTIAL_CONTENT : HttpStatus.OK)
                 .header("Content-Type", streamBytesInfo.getContentType())
                 .header("Accept-Ranges", "bytes")
-                .header("Content-Length", Long.toString(byteLength));
+                .header("Cache-Control", "public, max-age=3600")  // Cache for 1 hour, adjust as needed
+                .header("Connection", "keep-alive");
 
-        if (httpRangeList.size() > 0) {
-            builder.header(
-                    "Content-Range",
-                    "bytes " + streamBytesInfo.getRangeStart() +
-                            "-" + streamBytesInfo.getRangeEnd() +
-                            "/" + streamBytesInfo.getFileSize());
+        if (!httpRangeList.isEmpty()) {
+            builder.header("Content-Range",
+                    "bytes " + streamBytesInfo.getRangeStart() + "-" + streamBytesInfo.getRangeEnd() + "/" + streamBytesInfo.getFileSize());
         }
+
+        // Log information for debugging purposes
         log.info("Providing bytes from {} to {}. We are at {}% of overall video.",
                 streamBytesInfo.getRangeStart(),
                 streamBytesInfo.getRangeEnd(),
                 new DecimalFormat("###.##")
                         .format(100.0 * streamBytesInfo.getRangeStart() / streamBytesInfo.getFileSize()));
 
+        // Return the stream response with appropriate headers
         return builder.body(streamBytesInfo.getResponseBody());
     }
+
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   //  @CrossOrigin
