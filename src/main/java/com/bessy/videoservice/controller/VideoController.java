@@ -11,6 +11,7 @@ import org.springframework.http.HttpRange;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -23,8 +24,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class VideoController {
-
     private final VideoService videoService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private static final String VIDEO_UPLOAD_TOPIC = "video-uploads";
 
     @GetMapping("/all")
    // @CrossOrigin
@@ -95,6 +97,8 @@ public class VideoController {
         try {
             videoService.saveNewVideo(newVideoRepresentation);
             log.info("Video uploaded successfully.");
+            String message = String.format("New video %s was recently uploaded",  newVideoRepresentation.getDescription());
+            kafkaTemplate.send(VIDEO_UPLOAD_TOPIC, message);
         } catch (Exception ex) {
             log.error("Error uploading video: {}", ex.getMessage());
             log.error(ex.getMessage());
